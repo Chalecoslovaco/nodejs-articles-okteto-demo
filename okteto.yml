@@ -1,0 +1,6 @@
+name: nodejs-okteto-sample
+image: node:10
+command: ["bash"]
+forward:
+  - 3000:3000
+  - 9229:9229
