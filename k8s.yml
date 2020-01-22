@@ -1,6 +1,36 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: nodejs-okteto-sample
+  name: articles-back-deployment
 spec:
   replicas: 1
+  selector:
+    matchLabels:
+      app: articles-back
+  template:
+    metadata:
+      labels:
+        app: articles-back
+    spec:
+      containers:
+      - name: backend
+        image: marco2704/nodejs-articles-okteto-demo:beta
+        args: ["index.js"]
+        ports:
+        - containerPort: 3000
+        imagePullPolicy: Always
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: articles-back-service
+  annotations:
+    dev.okteto.com/auto-ingress: "true"
+spec:
+  type: ClusterIP
+  ports:
+  - name: "rest-api"
+    port: 3000
+  selector:
+    app: articles-back
